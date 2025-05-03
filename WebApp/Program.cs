@@ -19,28 +19,33 @@ namespace WebApp
                     await context.Response.WriteAsync("Welcome to the home page.");
                 });
 
-                endpoints.MapGet("/employees", async (HttpContext context) =>
-                {
-                    // Get all of the employees' information
-                    var employees = EmployeesRepository.GetEmployees();
+                //endpoints.MapGet("/employees", async (HttpContext context) =>
+                //{
+                //    // Get all of the employees' information
+                //    var employees = EmployeesRepository.GetEmployees();
 
-                    context.Response.ContentType = "text/html";
-                    await context.Response.WriteAsync("<h2>Employees</h2>");
-                    await context.Response.WriteAsync("<ul>");
-                    foreach (var employee in employees)
+                //    context.Response.ContentType = "text/html";
+                //    await context.Response.WriteAsync("<h2>Employees</h2>");
+                //    await context.Response.WriteAsync("<ul>");
+                //    foreach (var employee in employees)
+                //    {
+                //        await context.Response.WriteAsync($"<li><b>{employee.Name}</b>: {employee.Position}</li>");
+                //    }
+                //    await context.Response.WriteAsync("</ul>");
+
+                //});
+
+                endpoints.MapGet("/employees", ([FromQuery(Name = "id")] int? identityNumber) =>
+                {
+                    if (identityNumber.HasValue)
                     {
-                        await context.Response.WriteAsync($"<li><b>{employee.Name}</b>: {employee.Position}</li>");
+                        // Get a particular employee's information
+                        var employee = EmployeesRepository.GetEmployeeById(identityNumber.Value);
+
+                        return employee;
                     }
-                    await context.Response.WriteAsync("</ul>");
 
-                });
-
-                endpoints.MapGet("/employees/{id:int}", ([FromRoute(Name = "id")] int identityNumber) =>
-                {
-                    // Get a particular employee's information
-                    var employee = EmployeesRepository.GetEmployeeById(identityNumber);
-
-                    return employee;
+                    return null;
                 });
 
 
