@@ -35,17 +35,12 @@ namespace WebApp
 
                 //});
 
-                endpoints.MapGet("/employees", ([FromQuery(Name = "id")] int? identityNumber) =>
+                endpoints.MapGet("/employees", ([FromHeader(Name = "identity")] int id) =>
                 {
-                    if (identityNumber.HasValue)
-                    {
-                        // Get a particular employee's information
-                        var employee = EmployeesRepository.GetEmployeeById(identityNumber.Value);
+                    // Get a particular employee's information
+                    var employee = EmployeesRepository.GetEmployeeById(id);
 
-                        return employee;
-                    }
-
-                    return null;
+                    return employee;
                 });
 
 
