@@ -34,12 +34,16 @@ namespace WebApp
                 //    await context.Response.WriteAsync("</ul>");
 
                 //});
-                endpoints.MapGet("/employees", ([FromHeader(Name = "id")] int[] ids) =>
+                endpoints.MapPost("/employees", (Employee employee) =>
                 {
-                    var employees = EmployeesRepository.GetEmployees();
-                    var emps = employees.Where(x => ids.Contains(x.Id)).ToList();
+                    if (employee is null || employee.Id <= 0)
+                    {
+                        return "Employee is not provided or is not valid.";
+                    }
 
-                    return emps;
+                    EmployeesRepository.AddEmployee(employee);
+                    return "Employee added successfully.";
+
                 });
 
                 endpoints.MapPost("/employees", async (HttpContext context) =>
