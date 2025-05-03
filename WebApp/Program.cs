@@ -35,14 +35,16 @@ namespace WebApp
 
                 //});
 
-                endpoints.MapGet("/employees", ([FromHeader(Name = "identity")] int id) =>
+                endpoints.MapGet("/employees/{id:int}", ([AsParameters] GetEmployeeParameter param) =>
                 {
                     // Get a particular employee's information
-                    var employee = EmployeesRepository.GetEmployeeById(id);
+                    var employee = EmployeesRepository.GetEmployeeById(param.Id);
+
+                    employee.Name = param.Name;
+                    employee.Position = param.Position;
 
                     return employee;
                 });
-
 
                 endpoints.MapPost("/employees", async (HttpContext context) =>
                 {
@@ -123,5 +125,16 @@ namespace WebApp
             });
             app.Run();
         }
+    }
+    struct GetEmployeeParameter
+    {
+        [FromRoute]
+        public int Id { get; set; }
+
+        [FromQuery]
+        public string Name { get; set; }
+
+        [FromHeader]
+        public string Position { get; set; }
     }
 }
