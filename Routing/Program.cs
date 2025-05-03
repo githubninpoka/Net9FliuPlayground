@@ -1,3 +1,7 @@
+
+using Microsoft.AspNetCore.Http.HttpResults;
+using Microsoft.AspNetCore.Mvc;
+
 var builder = WebApplication.CreateBuilder(args);
 var app = builder.Build();
 
@@ -9,16 +13,7 @@ var app = builder.Build();
 
 app.UseRouting();
 
-app.UseEndpoints(endpoints =>
-{
-    endpoints.MapGet("/employees", async (HttpContext context) =>
-    {
-        await context.Response.WriteAsync("Get Employees");
-    });
-    endpoints.MapPost("/employees", async (HttpContext context) =>
-    {
-        await context.Response.WriteAsync("Post Employees");
-    });
-});
 
 app.Run();
+
+

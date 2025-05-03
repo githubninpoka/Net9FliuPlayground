@@ -1,9 +1,9 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
-VisualStudioVersion = 17.13.35931.197 d17.13
+VisualStudioVersion = 17.13.35931.197
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Routing", "Routing\Routing.csproj", "{22F0C29F-2198-41BC-8A82-336B9940D860}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebApp", "WebApp\WebApp.csproj", "{47FF5AF8-6ED9-41F6-AE54-022F29E5DA05}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -11,10 +11,10 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{22F0C29F-2198-41BC-8A82-336B9940D860}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{22F0C29F-2198-41BC-8A82-336B9940D860}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{22F0C29F-2198-41BC-8A82-336B9940D860}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{22F0C29F-2198-41BC-8A82-336B9940D860}.Release|Any CPU.Build.0 = Release|Any CPU
+		{47FF5AF8-6ED9-41F6-AE54-022F29E5DA05}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{47FF5AF8-6ED9-41F6-AE54-022F29E5DA05}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{47FF5AF8-6ED9-41F6-AE54-022F29E5DA05}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{47FF5AF8-6ED9-41F6-AE54-022F29E5DA05}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
