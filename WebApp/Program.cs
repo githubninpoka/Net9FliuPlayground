@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Mvc;
 using System.Text.Json;
 using WebApp.Models;
 
@@ -34,31 +35,14 @@ namespace WebApp
 
                 });
 
-                endpoints.MapGet("/employees/{id:int}", async (HttpContext context) =>
+                endpoints.MapGet("/employees/{id:int}", ([FromRoute(Name = "id")] int identityNumber) =>
                 {
-                    var id = context.Request.RouteValues["id"];
-                    var employeeId = int.Parse(id.ToString());
-
                     // Get a particular employee's information
-                    var employee = EmployeesRepository.GetEmployeeById(employeeId);
+                    var employee = EmployeesRepository.GetEmployeeById(identityNumber);
 
-                    context.Response.ContentType = "text/html";
-
-                    await context.Response.WriteAsync("<h2>Employee</h2>");
-                    if (employee is not null)
-                    {
-                        await context.Response.WriteAsync($"Name: {employee.Name}<br/>");
-                        await context.Response.WriteAsync($"Position: {employee.Position}<br/>");
-                        await context.Response.WriteAsync($"Salary: {employee.Salary}<br/>");
-                    }
-                    else
-                    {
-                        context.Response.StatusCode = 404;
-                        await context.Response.WriteAsync("Employee not found.");
-                    }
-
-
+                    return employee;
                 });
+
 
                 endpoints.MapPost("/employees", async (HttpContext context) =>
                 {
