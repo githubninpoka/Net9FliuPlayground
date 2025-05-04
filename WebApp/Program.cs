@@ -28,11 +28,14 @@ namespace WebApp
                     return TypedResults.Ok(employees);
                 });
 
-                endpoints.MapPost("/employees", (Employee employee) =>
+                app.MapPost("/employees", (Employee employee) =>
                 {
-                    if (employee is null)
+                    if (employee is null || employee.Id < 0)
                     {
-                        return Results.BadRequest("Employee is not provided or is not valid.");
+                        return Results.ValidationProblem(new Dictionary<string, string[]>
+                            {
+                                {"id", new[] { "Employee is not provided or is not valid." } }
+                            });
                     }
 
                     EmployeesRepository.AddEmployee(employee);
