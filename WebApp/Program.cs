@@ -1,6 +1,8 @@
+using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 using System.Text.Json;
 using WebApp.Models;
+using WebApp.ResultTypes;
 
 namespace WebApp
 {
@@ -9,6 +11,7 @@ namespace WebApp
         public static void Main(string[] args)
         {
             var builder = WebApplication.CreateBuilder(args);
+
             builder.Services.AddProblemDetails();
 
             var app = builder.Build();
@@ -24,9 +27,11 @@ namespace WebApp
             
             app.UseEndpoints(endpoints =>
             {
-                endpoints.MapGet("/", async (HttpContext context) =>
+                endpoints.MapGet("/", HtmlResult () =>
                 {
-                    await context.Response.WriteAsync("Welcome to the home page.");
+                    string html = "<h2>Welcome to our API</h2> Our API is used to learn ASP.NET CORE.";
+
+                    return new HtmlResult(html);
                 });
 
                 endpoints.MapGet("/employees", () =>
@@ -36,7 +41,7 @@ namespace WebApp
                     return TypedResults.Ok(employees);
                 });
 
-                app.MapPost("/employees", (Employee employee) =>
+                endpoints.MapPost("/employees", (Employee employee) =>
                 {
                     if (employee is null || employee.Id < 0)
                     {
