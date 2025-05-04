@@ -30,13 +30,13 @@ namespace WebApp
 
                 endpoints.MapPost("/employees", (Employee employee) =>
                 {
-                    if (employee is null || employee.Id <= 0)
+                    if (employee is null)
                     {
                         return Results.BadRequest("Employee is not provided or is not valid.");
                     }
 
                     EmployeesRepository.AddEmployee(employee);
-                    return Results.Ok("Employee added successfully.");
+                    return TypedResults.Created($"/employees/{employee.Id}", employee);
 
                 }).WithParameterValidation();
 
