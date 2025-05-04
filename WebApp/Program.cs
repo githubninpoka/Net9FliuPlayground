@@ -9,9 +9,11 @@ namespace WebApp
         public static void Main(string[] args)
         {
             var builder = WebApplication.CreateBuilder(args);
+            
             var app = builder.Build();
 
             app.UseRouting();
+            
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapGet("/", async (HttpContext context) =>
@@ -19,21 +21,21 @@ namespace WebApp
                     await context.Response.WriteAsync("Welcome to the home page.");
                 });
 
-                //endpoints.MapGet("/employees", async (HttpContext context) =>
-                //{
-                //    // Get all of the employees' information
-                //    var employees = EmployeesRepository.GetEmployees();
+                endpoints.MapGet("/employees", async (HttpContext context) =>
+                {
+                    // Get all of the employees' information
+                    var employees = EmployeesRepository.GetEmployees();
 
-                //    context.Response.ContentType = "text/html";
-                //    await context.Response.WriteAsync("<h2>Employees</h2>");
-                //    await context.Response.WriteAsync("<ul>");
-                //    foreach (var employee in employees)
-                //    {
-                //        await context.Response.WriteAsync($"<li><b>{employee.Name}</b>: {employee.Position}</li>");
-                //    }
-                //    await context.Response.WriteAsync("</ul>");
+                    context.Response.ContentType = "text/html";
+                    await context.Response.WriteAsync("<h2>Employees</h2>");
+                    await context.Response.WriteAsync("<ul>");
+                    foreach (var employee in employees)
+                    {
+                        await context.Response.WriteAsync($"<li><b>{employee.Name}</b>: {employee.Position}</li>");
+                    }
+                    await context.Response.WriteAsync("</ul>");
 
-                //});
+                });
                 endpoints.MapPost("/employees", (Employee employee) =>
                 {
                     if (employee is null || employee.Id <= 0)
@@ -44,36 +46,36 @@ namespace WebApp
                     EmployeesRepository.AddEmployee(employee);
                     return "Employee added successfully.";
 
-                });
+                }).WithParameterValidation();
 
-                endpoints.MapPost("/employees", async (HttpContext context) =>
-                {
-                    using var reader = new StreamReader(context.Request.Body);
-                    var body = await reader.ReadToEndAsync();
+                //endpoints.MapPost("/employees", async (HttpContext context) =>
+                //{
+                //    using var reader = new StreamReader(context.Request.Body);
+                //    var body = await reader.ReadToEndAsync();
 
-                    try
-                    {
-                        var employee = JsonSerializer.Deserialize<Employee>(body);
+                //    try
+                //    {
+                //        var employee = JsonSerializer.Deserialize<Employee>(body);
 
-                        if (employee is null || employee.Id <= 0)
-                        {
-                            context.Response.StatusCode = 400;
-                            return;
-                        }
+                //        if (employee is null || employee.Id <= 0)
+                //        {
+                //            context.Response.StatusCode = 400;
+                //            return;
+                //        }
 
-                        EmployeesRepository.AddEmployee(employee);
+                //        EmployeesRepository.AddEmployee(employee);
 
-                        context.Response.StatusCode = 201;
-                        await context.Response.WriteAsync("Employee added successfully.");
-                    }
-                    catch (Exception ex)
-                    {
-                        context.Response.StatusCode = 400;
-                        await context.Response.WriteAsync(ex.ToString());
-                        return;
-                    }
+                //        context.Response.StatusCode = 201;
+                //        await context.Response.WriteAsync("Employee added successfully.");
+                //    }
+                //    catch (Exception ex)
+                //    {
+                //        context.Response.StatusCode = 400;
+                //        await context.Response.WriteAsync(ex.ToString());
+                //        return;
+                //    }
 
-                });
+                //});
 
                 endpoints.MapPut("/employees", async (HttpContext context) =>
                 {
