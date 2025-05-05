@@ -14,16 +14,16 @@ public static class EmployeeEndpoints
             return new HtmlResult(html);
         });
 
-        app.MapGet("/employees", () =>
+        app.MapGet("/employees", (IEmployeesRepository employeesRepository) =>
         {
-            var employees = EmployeesRepository.GetEmployees();
+            var employees = employeesRepository.GetEmployees();
 
             return TypedResults.Ok(employees);
         });
 
-        app.MapGet("/employees/{id:int}", (int id) =>
+        app.MapGet("/employees/{id:int}", (int id, IEmployeesRepository employeesRepository) =>
         {
-            var employee = EmployeesRepository.GetEmployeeById(id);
+            var employee = employeesRepository.GetEmployeeById(id);
             return employee is not null
                 ? TypedResults.Ok(employee)
                 : Results.ValidationProblem(new Dictionary<string, string[]>
@@ -33,7 +33,7 @@ public static class EmployeeEndpoints
                 statusCode: 404);
         });
 
-        app.MapPost("/employees", (Employee employee) =>
+        app.MapPost("/employees", (Employee employee, IEmployeesRepository employeesRepository) =>
         {
             if (employee is null || employee.Id < 0)
             {
@@ -44,12 +44,12 @@ public static class EmployeeEndpoints
                 statusCode: 400);
             }
 
-            EmployeesRepository.AddEmployee(employee);
+            employeesRepository.AddEmployee(employee);
             return TypedResults.Created($"/employees/{employee.Id}", employee);
 
         }).WithParameterValidation();
 
-        app.MapPut("/employees/{id:int}", (int id, Employee employee) =>
+        app.MapPut("/employees/{id:int}", (int id, Employee employee, IEmployeesRepository employeesRepository) =>
         {
 
             if (id != employee.Id)
@@ -61,7 +61,7 @@ public static class EmployeeEndpoints
                 statusCode: 400);
             }
 
-            return EmployeesRepository.UpdateEmployee(employee)
+            return employeesRepository.UpdateEmployee(employee)
                 ? TypedResults.NoContent()
                 : Results.ValidationProblem(new Dictionary<string, string[]>
                 {
@@ -70,11 +70,11 @@ public static class EmployeeEndpoints
                 statusCode: 404);
         });
 
-        app.MapDelete("/employees/{id:int}", (int id) =>
+        app.MapDelete("/employees/{id:int}", (int id, IEmployeesRepository employeesRepository) =>
         {
-            var employee = EmployeesRepository.GetEmployeeById(id);
+            var employee = employeesRepository.GetEmployeeById(id);
 
-            return EmployeesRepository.DeleteEmployee(employee)
+            return employeesRepository.DeleteEmployee(employee)
                 ? TypedResults.Ok(employee)
                 : Results.ValidationProblem(new Dictionary<string, string[]>
                 {

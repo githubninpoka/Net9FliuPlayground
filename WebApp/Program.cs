@@ -13,6 +13,8 @@ public class Program
     {
         var builder = WebApplication.CreateBuilder(args);
 
+        builder.Services.AddSingleton<IEmployeesRepository, EmployeesRepository>();
+
         builder.Services.AddProblemDetails();
 
         var app = builder.Build();
