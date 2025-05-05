@@ -42,9 +42,8 @@
             return false;
         }
 
-        public static bool DeleteEmployee(int id)
+        public static bool DeleteEmployee(Employee? employee)
         {
-            var employee = employees.FirstOrDefault(x => x.Id == id);
             if (employee is not null)
             {
                 employees.Remove(employee);

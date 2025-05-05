@@ -24,7 +24,7 @@ namespace WebApp
             app.UseStatusCodePages();
 
             app.UseRouting();
-            
+
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapGet("/", HtmlResult () =>
@@ -41,14 +41,27 @@ namespace WebApp
                     return TypedResults.Ok(employees);
                 });
 
+                endpoints.MapGet("/employees/{id:int}", (int id) =>
+                {
+                    var employee = EmployeesRepository.GetEmployeeById(id);
+                    return employee is not null
+                        ? TypedResults.Ok(employee)
+                        : Results.ValidationProblem(new Dictionary<string, string[]>
+                        {
+                        {"id", new[] { $"Employee with the id {id} doesn't exist." } }
+                        },
+                        statusCode: 404);
+                });
+
                 endpoints.MapPost("/employees", (Employee employee) =>
                 {
                     if (employee is null || employee.Id < 0)
                     {
                         return Results.ValidationProblem(new Dictionary<string, string[]>
-                            {
-                                {"id", new[] { "Employee is not provided or is not valid." } }
-                            });
+                        {
+                        {"id", new[] { "Employee is not provided or is not valid." } }
+                        },
+                        statusCode: 400);
                     }
 
                     EmployeesRepository.AddEmployee(employee);
@@ -56,53 +69,38 @@ namespace WebApp
 
                 }).WithParameterValidation();
 
-
-
-                endpoints.MapPut("/employees", async (HttpContext context) =>
+                endpoints.MapPut("/employees/{id:int}", (int id, Employee employee) =>
                 {
-                    using var reader = new StreamReader(context.Request.Body);
-                    var body = await reader.ReadToEndAsync();
-                    var employee = JsonSerializer.Deserialize<Employee>(body);
 
-                    var result = EmployeesRepository.UpdateEmployee(employee);
-                    if (result)
+                    if (id != employee.Id)
                     {
-                        context.Response.StatusCode = 204;
-                        await context.Response.WriteAsync("Employee updated successfully.");
-                        return;
+                        return Results.ValidationProblem(new Dictionary<string, string[]>
+                        {
+                        {"id", new[] { "Employee id is not the same as id." } }
+                        },
+                        statusCode: 400);
                     }
-                    else
-                    {
-                        await context.Response.WriteAsync("Employee not found.");
-                    }
+
+                    return EmployeesRepository.UpdateEmployee(employee)
+                        ? TypedResults.NoContent()
+                        : Results.ValidationProblem(new Dictionary<string, string[]>
+                        {
+                        {"id", new[] { "Employee doesn't exist." } }
+                        },
+                        statusCode: 404);
                 });
 
-                endpoints.MapDelete("/employees/{id}", async (HttpContext context) =>
+                endpoints.MapDelete("/employees/{id:int}", (int id) =>
                 {
+                    var employee = EmployeesRepository.GetEmployeeById(id);
 
-                    var id = context.Request.RouteValues["id"];
-                    var employeeId = int.Parse(id.ToString());
-
-                    if (context.Request.Headers["Authorization"] == "frank")
-                    {
-                        var result = EmployeesRepository.DeleteEmployee(employeeId);
-
-                        if (result)
+                    return EmployeesRepository.DeleteEmployee(employee)
+                        ? TypedResults.Ok(employee)
+                        : Results.ValidationProblem(new Dictionary<string, string[]>
                         {
-                            await context.Response.WriteAsync("Employee is deleted successfully.");
-                        }
-                        else
-                        {
-                            context.Response.StatusCode = 404;
-                            await context.Response.WriteAsync("Employee not found.");
-                        }
-                    }
-                    else
-                    {
-                        context.Response.StatusCode = 401;
-                        await context.Response.WriteAsync("You are not authorized to delete.");
-                    }
-
+                        {"id", new[] { $"Employee with the id {id} doesn't exist." } }
+                        },
+                        statusCode: 404);
                 });
 
             });
