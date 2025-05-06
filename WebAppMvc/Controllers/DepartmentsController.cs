@@ -2,39 +2,33 @@
 
 namespace WebAppMvc.Controllers;
 
-//[Controller]
-// one way of specifying that a class is a controller
-
-// set a route for the controller
-[Route("/api")]
-public class DepartmentsController : Controller
-    // another way is the naming convention
-    // .net core is able to understand that it's a controller
-    // by the suffix Controller
-    // another way, I guess is by inheriting from controller
-    // we'll see later on if i mess stuff up
+public class DepartmentsController
 {
-    //[HttpGet]
-    //[Route("/departments")]
-    [HttpGet("departments")]
-    public string GetDepartments()
+    public string Index()
     {
-        return "departments";
+        return "These are the departments.";
     }
 
-    //[HttpGet]
-    //[Route("/departments/{id:int}")]
-    [HttpGet("departments/{id:int}")]
-    public string GetDepartmentById(int id)
+    public string Details(int? id)
     {
-        return $"Department info {id}";
+        return $"Department info: {id}";
     }
 
-    // annotation to state that an action will not become
-    // an action in the controller
-    [NonAction]
-    public string GetDepartmentByName(string name)
+    [HttpPost]
+    public string Create()
     {
-        return "Not an action";
+        return "Created a new department";
+    }
+
+    [HttpPost]
+    public string Delete(int? id)
+    {
+        return $"Deleted department: {id}";
+    }
+
+    [HttpPost]
+    public string Edit(int? id)
+    {
+        return $"Updated department: {id}";
     }
 }

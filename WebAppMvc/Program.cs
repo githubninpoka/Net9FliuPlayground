@@ -13,13 +13,23 @@ namespace WebAppMvc
             var app = builder.Build();
 
             app.UseRouting();
-            app.UseEndpoints(endpoints =>
-            {
-                // method that tells .net to find all controllers
-                endpoints.MapControllers();
-            });
+            //app.UseEndpoints(endpoints =>
+            //{
+            //    // method that tells .net to find all controllers
+            //    endpoints.MapControllers();
+            //});
             //app.MapControllers();
             // works just as well only less explicit
+
+            // conventional routing
+
+            app.UseEndpoints(endpoints =>
+            {
+                endpoints.MapControllerRoute(
+                    name: "default",
+                    pattern: "{controller=Home}/{action=Index}/{id?}"
+                    );
+            });
 
             app.Run();
         }
