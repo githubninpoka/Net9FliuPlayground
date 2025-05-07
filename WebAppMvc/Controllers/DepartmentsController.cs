@@ -24,7 +24,7 @@ public class DepartmentsController : Controller // controller base class provide
     [HttpPost]
     [Consumes("application/xml")]
     //[Route("create")]
-    public object Create([FromBody]Department department)
+    public IActionResult Create([FromBody]Department department)
     {
         ModelState.AddModelError("TestKey","TestErrorValue");
         foreach(var value in ModelState.Values)
@@ -35,8 +35,8 @@ public class DepartmentsController : Controller // controller base class provide
             }
         }
         // we can do something with the modelstate here. but probably somewhere in the filterpipeline there is something better...
-
-        return department;
+        return Json(department);
+        return new JsonResult(department);
     }
 
     [HttpPost]
