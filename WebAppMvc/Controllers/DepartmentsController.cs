@@ -11,9 +11,9 @@ namespace WebAppMvc.Controllers;
 
 public class DepartmentsController : Controller // controller base class provides access to ModelState that would otherwise not be available...
 {
-    public string Index()
+    public IActionResult Index()
     {
-        return "These are the departments.";
+        return Content("These are the departments.<h2>this can spit out HTML</h2>",contentType: "text/html");
     }
 
     public string Details(int? id)
