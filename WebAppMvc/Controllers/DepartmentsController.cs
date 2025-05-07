@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using WebAppMvc.Models;
 
 namespace WebAppMvc.Controllers;
 
@@ -15,9 +16,10 @@ public class DepartmentsController
     }
 
     [HttpPost]
-    public string Create()
+    [Consumes("application/xml")]
+    public object Create([FromBody]Department department)
     {
-        return "Created a new department";
+        return department;
     }
 
     [HttpPost]
