@@ -6,10 +6,8 @@ namespace WebAppMvc
         {
             var builder = WebApplication.CreateBuilder(args);
 
-            builder.Services.AddControllers()
+            builder.Services.AddControllersWithViews()
                 .AddXmlSerializerFormatters();
-            //builder.Services.AddControllersWithViews();
-            // for razor pages?
 
             var app = builder.Build();
 

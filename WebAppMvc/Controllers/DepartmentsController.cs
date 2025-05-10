@@ -16,20 +16,7 @@ public class DepartmentsController : Controller // controller base class provide
     {
         var departments = DepartmentsRepository.GetDepartments();
 
-        var html = $@"
-                    <h1>Departments</h1>
-                    <ul>
-                        {string.Join("", departments.Select(x => $@"
-                                    <li>
-                                        <a href='/departments/details/{x.Id}'>{x.Name} ({x.Description})</a>
-                                    </li>
-                                "))}
-                    </ul>
-                    <br/>
-                    <a href='/departments/create'>Add Department</a>
-                ";
-
-        return Content(html, "text/html");
+        return View(departments);
     }
 
     [HttpGet]
@@ -41,22 +28,8 @@ public class DepartmentsController : Controller // controller base class provide
             return Content("<h3 style='color: red'>Department not found.</h3>");
         }
 
-        var html = $@"
-                <h1>Department Details</h1>
-                <form method='post' action='/departments/edit'>
-                    <input type='hidden' name='Id' value='{department.Id}' />
-                    <label>Name: <input type='text' name='Name' value='{department.Name}' /></label><br />
-                    <label>Description: <input type='text' name='Description' value='{department.Description}' /></label><br />
-                    <br/>
-                    <a href='/departments'>Cancel</a>
-                    <button type='submit'>Update</button>
-                </form>
+        return View(department);
 
-                <form method='post' action='/departments/delete/{department.Id}'>
-                    <button type='submit' style='background-color:red;color:white'>Delete</button>
-                </form>";
-
-        return Content(html, "text/html");
     }
 
     [HttpPost]

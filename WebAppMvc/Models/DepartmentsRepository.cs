@@ -6,7 +6,7 @@ public static class DepartmentsRepository
         {
             new Department(1, "Sales", "Sales Department"),
             new Department(2, "Engineering", "Engineering Department"),
-            new Department(3, "QA", "Quanlity Assurance")
+            new Department(3, "QA", "Quality Assurance")
         };
 
     public static List<Department> GetDepartments() => Departments;
