@@ -1,0 +1,13 @@
+﻿@model List<string>
+
+@if(Model is not null && Model.Count > 0)
+{
+    <ul>
+    @foreach(string error in Model)
+    {
+        <ul>
+            @error
+        </ul>
+    }
+    </ul>
+}

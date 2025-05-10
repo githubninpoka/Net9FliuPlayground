@@ -25,7 +25,7 @@ public class DepartmentsController : Controller // controller base class provide
         var department = DepartmentsRepository.GetDepartmentById(id);
         if (department == null)
         {
-            return Content("<h3 style='color: red'>Department not found.</h3>");
+            return View("Error",new List<string>() { "Department not found." });
         }
 
         return View(department);
@@ -37,7 +37,7 @@ public class DepartmentsController : Controller // controller base class provide
     {
         if (!ModelState.IsValid)
         {
-            return Content(GetErrorsHTML(), "text/html");
+            return View("Error", GetErrors());
         }
 
         DepartmentsRepository.UpdateDepartment(department);
@@ -65,7 +65,7 @@ public class DepartmentsController : Controller // controller base class provide
     {
         if (!ModelState.IsValid)
         {
-            return Content(GetErrorsHTML(), "text/html");
+            return View("Error", GetErrors());
         }
 
         DepartmentsRepository.AddDepartment(department);
@@ -81,7 +81,7 @@ public class DepartmentsController : Controller // controller base class provide
         {
             ModelState.AddModelError("id", "Department not found.");
 
-            return Content(GetErrorsHTML(), "text/html");
+            return View("Error", GetErrors());
         }
 
         DepartmentsRepository.DeleteDepartment(department);
@@ -89,7 +89,7 @@ public class DepartmentsController : Controller // controller base class provide
         return RedirectToAction(nameof(Index));
     }
 
-    private string GetErrorsHTML()
+    private List<string> GetErrors()
     {
         List<string> errorMessages = new List<string>();
         foreach (var value in ModelState.Values)
@@ -100,16 +100,6 @@ public class DepartmentsController : Controller // controller base class provide
             }
         }
 
-        string html = string.Empty;
-        if (errorMessages.Count > 0)
-        {
-            html = $@"
-                    <ul>
-                        {string.Join("", errorMessages.Select(error => $"<li style='color:red;'>{error}</li>"))}
-                    </ul>";
-        }
-
-
-        return html;
+        return errorMessages;
     }
 }
