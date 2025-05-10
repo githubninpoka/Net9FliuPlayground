@@ -1,6 +1,6 @@
 ﻿@using WebAppMvc.Models
-@model Department
 
+@model Department
 
 <html>
 <head>
@@ -8,9 +8,8 @@
 </head>
 <body>
     <div class="container">
-        <h3>Department</h3>
-        <form method='post' action='/departments/edit'>
-            <input type='hidden' name='Id' value='@Model.Id' />
+        <h3>Add Department</h3>
+        <form method='post' action='/departments/create'>
 
             <div class="row mb-3">
                 <div class="col-2">
@@ -41,14 +40,8 @@
             </div>
         </form>
 
-        <form method='post' action='/departments/delete/@Model.Id'>
-            <button type='submit' class="btn btn-danger">Delete</button>
-        </form>
-
     </div>
 
 
 </body>
 </html>
-
-
